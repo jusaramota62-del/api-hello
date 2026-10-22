@@ -17,6 +17,7 @@ const saudacoes = {
 };
 
 // ROTAS - VERSÃO 1 (v1)
+
 app.get('/v1/hi', (req, res) => {
   const out = { msg: "Hello, world!" };
   logConsole(req, out);
@@ -42,6 +43,7 @@ app.post('/v1/hi', (req, res) => {
 });
 
 // ROTAS - VERSÃO 2 (v2 - Suporte a Idiomas)
+
 app.get('/v2/hi/:lang', (req, res) => {
   const lang = (req.params.lang || 'en').toLowerCase();
   const texto = saudacoes[lang] || saudacoes['en'];

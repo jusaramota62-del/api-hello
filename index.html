@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Teste de API - v2</title>
+</head>
+<body>
+  <h1>Formulário de Teste API - v2</h1>
+  
+  <form action="http://localhost:8000/v2/hi" method="post">
+    <div>
+      <label for="name">Seu Nome:</label>
+      <input type="text" id="name" name="name" required placeholder="Digite seu nome">
+    </div>
+    <br>
+    <div>
+      <label for="lang">Escolha o Idioma:</label>
+      <select id="lang" name="lang">
+        <option value="pt-br">Português (pt-br)</option>
+        <option value="es">Espanhol (es)</option>
+        <option value="en">Inglês (en)</option>
+      </select>
+    </div>
+    <br>
+    <button type="submit">Enviar Saudação</button>
+  </form>
+</body>
+</html>

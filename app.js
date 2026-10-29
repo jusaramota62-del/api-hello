@@ -3,29 +3,28 @@ const axios = require('axios');
 const app = express();
 const PORT = process.env.PORT || 8000;
 
-// Configuração do motor de visualização EJS
+// Configuração do EJS
 app.set('view engine', 'ejs');
 app.set('views', './views');
-
-// Middlewares para formulários e dados
 app.use(express.urlencoded({ extended: true }));
 
-// Função de Log no Console
 function logConsole(req, dataOutput) {
   const dataHora = new Date().toLocaleString('pt-BR');
   const endpoint = req.originalUrl || req.url;
   console.log(`[${dataHora}] | Endpoint: ${endpoint} | Saída: ${JSON.stringify(dataOutput)}`);
 }
 
-// Tabela de Saudações para a v2
 const saudacoes = {
   'pt-br': 'Olá',
   'es': 'Hola',
   'en': 'Hello'
 };
 
+// Chave da API da NASA (Pode usar DEMO_KEY ou sua chave individual)
+const NASA_API_KEY = process.env.NASA_API_KEY || 'DEMO_KEY';
+
 // ==========================================
-// ROTA PRINCIPAL: Mensagem do Dia 
+// ROTA PRINCIPAL: Mensagem do Dia (Aula 17)
 // ==========================================
 
 app.get('/', async (req, res) => {
@@ -44,6 +43,62 @@ app.get('/', async (req, res) => {
     const errObj = { error: 'Não foi possível carregar a mensagem do dia no momento.' };
     logConsole(req, errObj);
     res.render('index', { quotePt: null, quoteEn: null, error: errObj.error });
+  }
+});
+
+// ==========================================
+// ROTA NASA: Exercício Final da Aula 18
+// ==========================================
+
+app.get('/nasa', async (req, res) => {
+  const astro = (req.query.astro || 'Moon').trim();
+
+  try {
+    let images = [];
+
+    // 1. Busca direta na Biblioteca Oficial da NASA (sem limite de requisição e 100% domínio público)
+    try {
+      const searchUrl = `https://images-api.nasa.gov/search?q=${encodeURIComponent(astro)}&media_type=image`;
+      const searchResponse = await axios.get(searchUrl);
+      const items = searchResponse.data.collection.items || [];
+
+      images = items
+        .filter(item => item.links && item.links.length > 0)
+        .slice(0, 8)
+        .map(item => ({
+          title: item.data[0]?.title || astro,
+          url: item.links[0].href,
+          explanation: item.data[0]?.description || 'Imagem oficial do acervo da NASA (Domínio Público).'
+        }));
+    } catch (e) {
+      console.log('Busca primária falhou, tentando APOD...', e.message);
+    }
+
+    // 2. Fallback caso a busca acima retorne vazia: consulta a API APOD com lote reduzido (count=10)
+    if (images.length === 0) {
+      const apodUrl = `https://api.nasa.gov/planetary/apod?api_key=${NASA_API_KEY}&count=10`;
+      const apodResponse = await axios.get(apodUrl);
+
+      images = apodResponse.data
+        .filter(item => item.media_type === 'image' && !item.copyright)
+        .map(item => ({
+          title: item.title,
+          url: item.url,
+          explanation: item.explanation
+        }));
+    }
+
+    logConsole(req, { astro, totalResultados: images.length });
+    res.render('nasa', { astro, images, error: null });
+
+  } catch (err) {
+    console.error('Erro na API da NASA:', err.message);
+    logConsole(req, { error: err.message });
+    res.render('nasa', { 
+      astro, 
+      images: [], 
+      error: 'Não foi possível conectar à API da NASA no momento. Tente novamente em alguns instantes.' 
+    });
   }
 });
 

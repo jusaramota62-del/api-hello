@@ -29,20 +29,23 @@ const NASA_API_KEY = process.env.NASA_API_KEY || 'DEMO_KEY';
 
 app.get('/', async (req, res) => {
   try {
-    const ronResponse = await axios.get('https://ron-swanson-quotes.herokuapp.com/v2/quotes');
-    const quoteEn = ronResponse.data[0];
+    // 1. Busca uma frase e autor aleatórios da API ZenQuotes
+    const zenResponse = await axios.get('https://zenquotes.io/api/random');
+    const quoteEn = zenResponse.data[0].q;
+    const author = zenResponse.data[0].a || 'Autor Desconhecido';
 
+    // 2. Traduz a frase para Português
     const translateUrl = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=pt&dt=t&q=${encodeURIComponent(quoteEn)}`;
     const transResponse = await axios.get(translateUrl);
     const quotePt = transResponse.data[0][0][0];
 
-    logConsole(req, { quotePt, quoteEn });
-    res.render('index', { quotePt, quoteEn, error: null });
+    logConsole(req, { quotePt, quoteEn, author });
+    res.render('index', { quotePt, quoteEn, author, error: null });
   } catch (err) {
     console.error('Erro ao buscar/traduzir citação:', err.message);
     const errObj = { error: 'Não foi possível carregar a mensagem do dia no momento.' };
     logConsole(req, errObj);
-    res.render('index', { quotePt: null, quoteEn: null, error: errObj.error });
+    res.render('index', { quotePt: null, quoteEn: null, author: null, error: errObj.error });
   }
 });
 

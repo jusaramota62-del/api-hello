@@ -3,16 +3,54 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Mensagem do Dia - Ron Swanson</title>
+  <title>API Hello Project - Mensagem do Dia</title>
   <!-- Bootstrap 5 CDN -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
-<body class="bg-light d-flex align-items-center min-vh-100">
-  <div class="container">
+<body class="bg-light d-flex flex-column min-vh-100">
+
+  <!-- Menu de Navegação Superior (Navbar) -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm mb-4">
+    <div class="container">
+      <a class="navbar-brand fw-bold" href="/">🚀 API Hello Project</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto align-items-center">
+          <li class="nav-item">
+            <a class="nav-link active fw-semibold" href="/">💡 Mensagem do Dia</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link fw-semibold" href="/nasa">🌌 NASA Astros (Aula 18)</a>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle fw-semibold" href="#" id="apiDropdown" role="button" data-bs-toggle="dropdown">
+              🔌 Endpoints REST (v1 / v2)
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end">
+              <li><h6 class="dropdown-header">API v1</h6></li>
+              <li><a class="dropdown-item" href="/v1/hi" target="_blank">GET /v1/hi</a></li>
+              <li><a class="dropdown-item" href="/v1/hi/user/Jusara" target="_blank">GET /v1/hi/user/:name</a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><h6 class="dropdown-header">API v2 (Multilingue)</h6></li>
+              <li><a class="dropdown-item" href="/v2/hi/pt-br" target="_blank">GET /v2/hi/pt-br</a></li>
+              <li><a class="dropdown-item" href="/v2/hi/es" target="_blank">GET /v2/hi/es</a></li>
+              <li><a class="dropdown-item" href="/v2/hi/en" target="_blank">GET /v2/hi/en</a></li>
+              <li><a class="dropdown-item" href="/v2/hi/user/pt-br/Jusara" target="_blank">GET /v2/hi/user/pt-br/:name</a></li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Conteúdo Principal -->
+  <div class="container my-auto py-3">
     <div class="row justify-content-center">
-      <div class="col-md-8 col-lg-6 text-center">
+      <div class="col-md-9 col-lg-7 text-center">
         
-        <div class="card shadow-lg border-0 rounded-4 p-4">
+        <div class="card shadow-lg border-0 rounded-4 p-4 mb-4 bg-white">
           <div class="card-body">
             <h1 class="card-title h3 mb-4 text-primary font-weight-bold">
               💡 Mensagem do Dia
@@ -22,7 +60,7 @@
               <blockquote class="blockquote my-4">
                 <p class="fs-4 fw-semibold text-dark">"<%= quotePt %>"</p>
                 <footer class="blockquote-footer mt-3">
-                  <span class="d-block text-secondary mb-1">— <strong>Ron Swanson</strong></span>
+                  <span class="d-block text-secondary mb-1">— <strong><%= author %></strong></span>
                   <small class="text-muted">Original em inglês: <em>"<%= quoteEn %>"</em></small>
                 </footer>
               </blockquote>
@@ -40,12 +78,28 @@
           </div>
         </div>
 
-        <p class="text-muted mt-3 small">
-          Aplicação desenvolvida com Node.js, Express, EJS e Bootstrap.
-        </p>
+        <!-- Painel de Atalhos Rápidos -->
+        <div class="card border-0 shadow-sm rounded-4 p-3 bg-body-tertiary">
+          <div class="card-body">
+            <h6 class="fw-bold text-secondary mb-3">🗺️ Atalhos para Endpoints REST (Abrem em nova aba):</h6>
+            <div class="d-flex flex-wrap justify-content-center gap-2">
+              <a href="/v1/hi" target="_blank" class="btn btn-sm btn-outline-secondary">/v1/hi</a>
+              <a href="/v1/hi/user/Jusara" target="_blank" class="btn btn-sm btn-outline-secondary">/v1/hi/user/Jusara</a>
+              <a href="/v2/hi/pt-br" target="_blank" class="btn btn-sm btn-outline-primary">/v2/hi/pt-br</a>
+              <a href="/v2/hi/es" target="_blank" class="btn btn-sm btn-outline-primary">/v2/hi/es</a>
+              <a href="/v2/hi/en" target="_blank" class="btn btn-sm btn-outline-primary">/v2/hi/en</a>
+            </div>
+          </div>
+        </div>
 
       </div>
     </div>
   </div>
+
+  <footer class="text-center text-muted py-3 mt-auto small">
+    Programação Web 1 • Node.js, Express & EJS
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
